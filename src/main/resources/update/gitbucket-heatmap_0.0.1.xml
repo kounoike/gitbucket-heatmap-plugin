@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<changeSet>
+    <createTable tableName="HM_COMMIT">
+        <column name="USER_NAME" type="varchar(100)" nullable="false"/>
+        <column name="REPOSITORY_NAME" type="varchar(100)" nullable="false"/>
+        <column name="BRANCH_NAME" type="varchar(100)" nullable="false"/>
+        <column name="COMMIT_ID" type="varchar(100)" nullable="false"/>
+        <column name="COMMITTER_MAIL" type="varchar(100)" nullable="false"/>
+        <column name="COMMIT_TIME" type="datetime" nullable="false"/>
+    </createTable>
+
+    <addPrimaryKey constraintName="IDX_HM_COMMIT_PK" tableName="HM_COMMIT" columnNames="USER_NAME, REPOSITORY_NAME, COMMIT_ID"/>
+    <createIndex indexName="IDX_HM_COMMIT_MAIL" tableName="HM_COMMIT" unique="false">
+        <column name="COMMITTER_MAIL" />
+    </createIndex>
+    <createIndex indexName="IDX_HM_COMMIT_TIME" tableName="HM_COMMIT" unique="false">
+        <column name="COMMIT_TIME" />
+    </createIndex>
+</changeSet>

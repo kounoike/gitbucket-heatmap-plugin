@@ -1,0 +1,210 @@
+.skin-blue .cal-heatmap-container .q1,
+.skin-blue-light .cal-heatmap-container .q1
+{
+	background-color: #eaf7ff;
+	fill: #eaf7ff
+}
+
+.skin-blue .cal-heatmap-container .q2,
+.skin-blue-light .cal-heatmap-container .q2
+{
+	background-color: #9ddbff;
+	fill: #9ddbff
+}
+
+.skin-blue .cal-heatmap-container .q3,
+.skin-blue-light .cal-heatmap-container .q3
+{
+	background-color: 51beff;
+	fill: #51beff
+}
+
+.skin-blue .cal-heatmap-container .q4,
+.skin-blue-light .cal-heatmap-container .q4
+{
+	background-color: #04a2ff;
+	fill: #04a2ff
+}
+
+.skin-blue .cal-heatmap-container .q5,
+.skin-blue-light .cal-heatmap-container .q5
+{
+	background-color: #0073b7;
+	fill: #0073b7
+}
+
+.skin-red .cal-heatmap-container .q1,
+.skin-red-light .cal-heatmap-container .q1
+{
+	background-color: #f7d5d1;
+	fill: #f7d5d1
+}
+
+.skin-red .cal-heatmap-container .q2,
+.skin-red-light .cal-heatmap-container .q2
+{
+	background-color: #ec9a90;
+	fill: #ec9a90
+}
+
+.skin-red .cal-heatmap-container .q3,
+.skin-red-light .cal-heatmap-container .q3
+{
+	background-color: e15f4e;
+	fill: #e15f4e
+}
+
+.skin-red .cal-heatmap-container .q4,
+.skin-red-light .cal-heatmap-container .q4
+{
+	background-color: #c13321;
+	fill: #c13321
+}
+
+.skin-red .cal-heatmap-container .q5,
+.skin-red-light .cal-heatmap-container .q5
+{
+	background-color: #802216;
+	fill: #802216
+}
+
+.skin-green .cal-heatmap-container .q1,
+.skin-green-light .cal-heatmap-container .q1
+{
+	background-color: #d9ffee;
+	fill: #d9ffee
+}
+
+.skin-green .cal-heatmap-container .q2,
+.skin-green-light .cal-heatmap-container .q2
+{
+	background-color: #8cffcb;
+	fill: #8cffcb
+}
+
+.skin-green .cal-heatmap-container .q3,
+.skin-green-light .cal-heatmap-container .q3
+{
+	background-color: 40ffa8;
+	fill: #40ffa8
+}
+
+.skin-green .cal-heatmap-container .q4,
+.skin-green-light .cal-heatmap-container .q4
+{
+	background-color: #00f283;
+	fill: #00f283
+}
+
+.skin-green .cal-heatmap-container .q5,
+.skin-green-light .cal-heatmap-container .q5
+{
+	background-color: #00a65a;
+	fill: #00a65a
+}
+
+.skin-yellow .cal-heatmap-container .q1,
+.skin-yellow-light .cal-heatmap-container .q1
+{
+	background-color: #fdedd3;
+	fill: #fdedd3
+}
+
+.skin-yellow .cal-heatmap-container .q2,
+.skin-yellow-light .cal-heatmap-container .q2
+{
+	background-color: #facf8a;
+	fill: #facf8a
+}
+
+.skin-yellow .cal-heatmap-container .q3,
+.skin-yellow-light .cal-heatmap-container .q3
+{
+	background-color: f6b141;
+	fill: #f6b141
+}
+
+.skin-yellow .cal-heatmap-container .q4,
+.skin-yellow-light .cal-heatmap-container .q4
+{
+	background-color: #e08e0a;
+	fill: #e08e0a
+}
+
+.skin-yellow .cal-heatmap-container .q5,
+.skin-yellow-light .cal-heatmap-container .q5
+{
+	background-color: #976007;
+	fill: #976007
+}
+
+.skin-purple .cal-heatmap-container .q1,
+.skin-purple-light .cal-heatmap-container .q1
+{
+	background-color: #e2e1ef;
+	fill: #e2e1ef
+}
+
+.skin-purple .cal-heatmap-container .q2,
+.skin-purple-light .cal-heatmap-container .q2
+{
+	background-color: #b1afd4;
+	fill: #b1afd4
+}
+
+.skin-purple .cal-heatmap-container .q3,
+.skin-purple-light .cal-heatmap-container .q3
+{
+	background-color: 817dba;
+	fill: #817dba
+}
+
+.skin-purple .cal-heatmap-container .q4,
+.skin-purple-light .cal-heatmap-container .q4
+{
+	background-color: #565299;
+	fill: #565299
+}
+
+.skin-purple .cal-heatmap-container .q5,
+.skin-purple-light .cal-heatmap-container .q5
+{
+	background-color: #3a3767;
+	fill: #3a3767
+}
+
+.skin-black .cal-heatmap-container .q1,
+.skin-black-light .cal-heatmap-container .q1
+{
+	background-color: #d0d0d0;
+	fill: #d0d0d0
+}
+
+.skin-black .cal-heatmap-container .q2,
+.skin-black-light .cal-heatmap-container .q2
+{
+	background-color: #aaaaaa;
+	fill: #aaaaaa
+}
+
+.skin-black .cal-heatmap-container .q3,
+.skin-black-light .cal-heatmap-container .q3
+{
+	background-color: 838383;
+	fill: #838383
+}
+
+.skin-black .cal-heatmap-container .q4,
+.skin-black-light .cal-heatmap-container .q4
+{
+	background-color: #5d5d5d;
+	fill: #5d5d5d
+}
+
+.skin-black .cal-heatmap-container .q5,
+.skin-black-light .cal-heatmap-container .q5
+{
+	background-color: #373737;
+	fill: #373737
+}
+
