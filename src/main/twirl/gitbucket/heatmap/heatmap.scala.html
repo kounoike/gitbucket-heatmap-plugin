@@ -31,8 +31,8 @@
         };
         var cal = new CalHeatMap();
         var startDate = new Date();
-        startDate.setFullYear(startDate.getFullYear() - 1);
-        startDate.setDate(startDate.getDate() + 1);
+        startDate.setDate(1);
+        startDate.setMonth(startDate.getMonth() - 11);
         cal.init({
             itemSelector: "#cal-heatmap",
             domain: "month",
