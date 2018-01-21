@@ -29,4 +29,14 @@ trait HeatMapCommitService {
       commitTime
     )
   }
+
+  def removeHeatMapCommit(
+    userName: String,
+    repositoryName: String,
+    branchName: String
+  )(implicit s: Session): Unit = {
+    HeatMapCommits filter {t =>
+      t.userName === userName.bind && t.repositoryName === repositoryName.bind && t.branchName === branchName.bind
+    } delete
+  }
 }

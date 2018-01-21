@@ -18,23 +18,11 @@ class CommitHook extends ReceiveHook with RepositoryService with AccountService 
   override def postReceive(owner: String, repository: String, receivePack: ReceivePack, command: ReceiveCommand,
                            pusher: String)(implicit s: Profile.profile.api.Session): Unit = {
     val branch = command.getRefName.stripPrefix("refs/heads/")
-    if(branch != command.getRefName && command.getType != ReceiveCommand.Type.DELETE){
+    if(branch != command.getRefName && command.getResult == ReceiveCommand.Result.OK && command.getType != ReceiveCommand.Type.DELETE){
       getRepository(owner, repository).foreach{ repositoryInfo =>
         using(Git.open(getRepositoryDir(owner, repository))) { git =>
           val sha = command.getNewId.name
           val revCommit = JGitUtil.getRevCommitFromId(git, command.getNewId)
-          logger.debug(
-            s"""postReceive
-              |commandType: ${command.getType}
-              |oldSha: ${command.getOldId.name}
-              |RefLogMessage: ${command.getRefLogMessage}
-              |sha: ${sha}
-              |commitMessage: ${revCommit.getShortMessage}
-              |commitUserName: ${revCommit.getCommitterIdent.getName}
-              |commitMailAddress: ${revCommit.getCommitterIdent.getEmailAddress}
-              |time: ${revCommit.getCommitTime}
-            """.stripMargin)
-
           val refName = command.getRefName.split("/")
           val branchName = refName.drop(2).mkString("/")
           val commits = command.getRefName.split("/")(1) match {
@@ -48,18 +36,15 @@ class CommitHook extends ReceiveHook with RepositoryService with AccountService 
                   JGitUtil.getCommitLog(git, command.getOldId.name, command.getNewId.name)
               }
           }
+          if(command.getType == ReceiveCommand.Type.UPDATE_NONFASTFORWARD) {
+            removeHeatMapCommit(owner, repository, branchName)
+          }
           commits.foreach{ commit =>
-            logger.debug(
-              s"""New Commit?
-                |sha:${commit.id}
-                |Message:${commit.shortMessage}
-                |UserName:${commit.committerName}
-                |Mail:${commit.committerEmailAddress}
-                |commitTime:${commit.commitTime}
-                |authorTime:${commit.authorTime}
-              """.stripMargin
-            )
-            insertHeatMapCommit(owner, repository, branchName, commit.id, commit.committerEmailAddress, commit.commitTime)
+            try{
+              insertHeatMapCommit(owner, repository, branchName, commit.id, commit.committerEmailAddress, commit.commitTime)
+            } catch { case e: Exception =>
+              logger.error("Error when insert commit: {}", commit.id, e)
+            }
           }
         }
       }
