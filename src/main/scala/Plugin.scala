@@ -34,8 +34,8 @@ class CommitMigration extends Migration with HeatMapCommitService with AccountSe
               git.log.add(commitId).call.iterator.asScala.foreach { revCommit =>
                 try{
                   insertHeatMapCommit(userName, repositoryName, branchName, revCommit.name, revCommit.getCommitterIdent.getEmailAddress, new Date(revCommit.getCommitTime * 1000L) )
-                }catch { case e:Exception =>
-                  logger.error("Failed to insert commit:{}", revCommit.name, e)
+                }catch { case e:Throwable =>
+                  logger.error(s"Failed to insert commit:${revCommit.name}", e)
                 }
               }
             }

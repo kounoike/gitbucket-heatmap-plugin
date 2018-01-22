@@ -42,8 +42,8 @@ class CommitHook extends ReceiveHook with RepositoryService with AccountService 
           commits.foreach{ commit =>
             try{
               insertHeatMapCommit(owner, repository, branchName, commit.id, commit.committerEmailAddress, commit.commitTime)
-            } catch { case e: Exception =>
-              logger.error("Error when insert commit: {}", commit.id, e)
+            } catch { case e: Throwable =>
+              logger.error(s"Error when insert commit: ${commit.id}", e)
             }
           }
         }
