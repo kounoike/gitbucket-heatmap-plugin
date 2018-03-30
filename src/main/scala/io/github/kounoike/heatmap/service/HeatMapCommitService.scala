@@ -1,7 +1,7 @@
 package io.github.kounoike.heatmap.service
 
 import gitbucket.core.model.Session
-import io.github.kounoike.heatmap.model.Profile._
+import io.github.kounoike.heatmap.model.HeatmapProfile._
 import gitbucket.core.model.Profile.profile.blockingApi._
 import io.github.kounoike.heatmap.model.HeatMapCommit
 

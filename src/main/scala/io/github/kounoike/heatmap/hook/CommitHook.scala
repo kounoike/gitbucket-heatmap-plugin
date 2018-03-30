@@ -17,8 +17,10 @@ class CommitHook extends ReceiveHook with RepositoryService with AccountService 
 
   override def postReceive(owner: String, repository: String, receivePack: ReceivePack, command: ReceiveCommand,
                            pusher: String)(implicit s: Profile.profile.api.Session): Unit = {
+    logger.info(s"postReceive ref:${command.getRefName} oldSha:${command.getOldId} newSha:${command.getNewId} type:${command.getType} result:${command.getResult}")
     val branch = command.getRefName.stripPrefix("refs/heads/")
-    if(branch != command.getRefName && command.getResult == ReceiveCommand.Result.OK && command.getType != ReceiveCommand.Type.DELETE){
+    if(branch != command.getRefName && (command.getResult == ReceiveCommand.Result.OK || command.getResult == ReceiveCommand.Result.NOT_ATTEMPTED)
+      && command.getType != ReceiveCommand.Type.DELETE){
       getRepository(owner, repository).foreach{ repositoryInfo =>
         using(Git.open(getRepositoryDir(owner, repository))) { git =>
           val sha = command.getNewId.name
@@ -41,6 +43,7 @@ class CommitHook extends ReceiveHook with RepositoryService with AccountService 
           }
           commits.foreach{ commit =>
             try{
+              logger.info(s"commit: ${commit.id}")
               insertHeatMapCommit(owner, repository, branchName, commit.id, commit.committerEmailAddress, commit.commitTime)
             } catch { case e: Throwable =>
               logger.error(s"Error when insert commit: ${commit.id}", e)

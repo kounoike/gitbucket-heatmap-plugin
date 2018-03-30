@@ -8,8 +8,12 @@
     <script type="text/javascript" src="@context.path/plugin-assets/heatmap/cal-heatmap.min.js"></script>
     <h3>@account.userName Contributions</h3>
     <div style="margin-bottom: 5px">
-        <button id="cal-heatmap-prev"><i class="octicon octicon-arrow-left"></i></button>
-        <button id="cal-heatmap-next"><i class="octicon octicon-arrow-right"></i></button>
+      <button id="cal-heatmap-prev"><i class="fa fa-arrow-left"></i></button>
+      <button id="cal-heatmap-next"><i class="fa fa-arrow-right"></i></button>
+      <button id="cal-heatmap-x1">1</button>
+      <button id="cal-heatmap-x10">10</button>
+      <button id="cal-heatmap-x100">100</button>
+      <button id="cal-heatmap-x1000">1000</button>
     </div>
     <div id="cal-heatmap"></div>
     <script type="text/javascript">
@@ -29,11 +33,11 @@
         console.log(d);
             return d;
         };
-        var cal = new CalHeatMap();
+        window.cal = new CalHeatMap();
         var startDate = new Date();
         startDate.setDate(1);
         startDate.setMonth(startDate.getMonth() - 11);
-        cal.init({
+        window.cal.init({
             itemSelector: "#cal-heatmap",
             domain: "month",
             start: startDate,
@@ -45,6 +49,19 @@
             afterLoadData: parser,
             nextSelector: "#cal-heatmap-next",
             previousSelector: "#cal-heatmap-prev"
+        });
+
+        $("#cal-heatmap-x1").on('click', function() {
+          window.cal.setLegend([2, 4, 6, 8]);
+        });
+        $("#cal-heatmap-x10").on('click', function() {
+          window.cal.setLegend([20, 40, 60, 80]);
+        });
+        $("#cal-heatmap-x100").on('click', function() {
+          window.cal.setLegend([200, 400, 600, 800]);
+        });
+        $("#cal-heatmap-x1000").on('click', function() {
+          window.cal.setLegend([2000, 4000, 6000, 8000]);
         });
     </script>
 }

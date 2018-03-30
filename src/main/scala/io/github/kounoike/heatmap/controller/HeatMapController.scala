@@ -1,18 +1,48 @@
 package io.github.kounoike.heatmap.controller
 
 import gitbucket.core.controller.ControllerBase
-import gitbucket.core.service.AccountService
+import gitbucket.core.service.{AccountService, RepositoryService}
 import gitbucket.core.util.Implicits._
 import gitbucket.core.model.Profile.profile.blockingApi._
-import gitbucket.core.model.Profile._
+import gitbucket.core.util.ReferrerAuthenticator
 import io.github.kounoike.heatmap.service.HeatMapCommitService
+import io.github.kounoike.heatmap.model.HeatmapProfile._
 
-class HeatMapController extends ControllerBase with AccountService with HeatMapCommitService{
+class HeatMapController extends ControllerBase with HeatMapCommitService
+  with AccountService with RepositoryService with ReferrerAuthenticator{
 
   private val commitScore: Int = 1
   private val issueScore: Int = 1
   private val pullScore: Int = 1
   private val commentScore: Int = 1
+
+  get("/:owner/:repository/_pulse")(referrersOnly{ repository =>
+    val count = HeatMapCommits.filter{ t =>
+      (t.userName === repository.owner.bind) && (t.repositoryName === repository.name.bind)
+    }.length.run
+    val commits = HeatMapCommits filter { t =>
+      (t.userName === repository.owner.bind) && (t.repositoryName === repository.name.bind)
+    } groupBy { _.committerMail } map { case (mail, t) =>
+      mail -> t.length
+    } sortBy { _._2.desc } list
+    val commitsByName = commits.zipWithIndex.map{ case ((mail, count), index) =>
+      getAccountByMailAddress(mail, true).map{ t => t.fullName -> count }.getOrElse{ s"unknown_${index}" -> count }
+      //getAccountByMailAddress(mail, true).map{ t => t.userName -> count }.getOrElse{ mail -> count }
+    }
+    gitbucket.heatmap.html.pulse(repository, commitsByName, count)
+  })
+
+  ajaxGet("/:owner/:repository/_pulse/commits_json")(referrersOnly { repository =>
+    val commits = HeatMapCommits filter { t =>
+      (t.userName === repository.owner.bind) && (t.repositoryName === repository.name.bind)
+    } groupBy { _.committerMail } map { case (mail, t) =>
+      mail -> t.length
+    } sortBy { _._2 } list
+    val commitsByName = commits.map{ case (mail, count) =>
+        getAccountByMailAddress(mail, true).map{ t => Map("name" -> t.userName, "count" -> count) }.getOrElse{ Map("name" -> "unknown", "count" -> count) }
+    }
+    org.json4s.jackson.Serialization.write(commitsByName)
+  })
 
   get("/:userName/_contribution") {
     val userName = params("userName")

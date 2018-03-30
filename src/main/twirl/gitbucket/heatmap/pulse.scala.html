@@ -1,0 +1,152 @@
+@(repository: gitbucket.core.service.RepositoryService.RepositoryInfo,
+commitCounts: List[(String, Int)], commitCount: Long
+)(implicit context: gitbucket.core.controller.Context)
+@import gitbucket.core.view.helpers
+<link href="@context.path/plugin-assets/heatmap/c3.min.css" rel="stylesheet">
+<link rel="stylesheet" href="@context.path/plugin-assets/heatmap/jqplot/jquery.jqplot.min.css" />
+<link rel="stylesheet" href="@context.path/plugin-assets/heatmap/gitbucket-cal-heatmap.css" />
+<style>
+  .c3 text.c3-chart-arcs-title {
+    font-size: 30pt;
+  }
+</style>
+@gitbucket.core.html.main(s"Pulse - ${repository.owner}/${repository.name}"){
+  @gitbucket.core.html.menu("pulse", repository){
+    <h3>Pulse - @repository.owner/@repository.name</h3>
+    <div id="pulse-commits" style="height: 400px"></div>
+    <div id="pulse-commits-jq" style="height: 400px"></div>
+@*
+    <div>
+      <canvas id="pulse-chartjs" width="400" height="400"></canvas>
+    </div>
+*@
+  }
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.js"></script>
+<script type="text/javascript">
+$(function(){
+  var data = {
+    @Html(commitCounts.map{ case (u, c) => s"'${u}': ${c}" }.mkString(","))
+  };
+  var data_values = [ @Html(commitCounts.map{ case (u, c) => s"'${u}'" }.mkString(",")) ];
+  var unknowns = data_values.filter(function(k){return k.startsWith("unknown")});
+  if(unknowns.length > 0) {
+    data["unknown"] = unknowns.reduce(function(p, k) {return p + data[k]}, 0);
+    data_values = data_values.filter(function(k){return !k.startsWith("unknown")}).concat("unknown");
+  }
+  var chart = c3.generate({
+    bindto: '#pulse-commits',
+    data: {
+      json: [data],
+      keys: {
+        value: data_values
+      },
+      type: 'donut'
+    },
+    tooltip: {
+      format: {
+        value: function (value, ratio, id, index) { return value + " commits / " + (ratio * 100).toFixed(1) + "%"; }
+      }
+    },
+    donut: {
+      title: '@commitCount',
+expand: false,
+      label: {
+        format: function (value, ratio, id) {
+          return value;
+        }
+      }
+    }
+  });
+@*
+  var config = {
+    type: 'doughnut',
+    data: {
+      datasets: [{
+        data: Object.values(data)
+      }],
+      labels: Object.keys(data)
+    },
+    options: {
+      responsive: true,
+      legend: {
+        position: 'top'
+      },
+      title: {
+        display: true,
+        text: 'commits?'
+      },
+      animation: {
+        animationScale: true,
+        animationRotate: true
+      }
+    }
+  };
+  window.donughnut = new Chart($("#pulse-chartjs")[0].getContext('2d'), config);
+*@
+});
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+<script src="@context.path/plugin-assets/heatmap/c3.min.js"></script>
+
+<script src="@context.path/plugin-assets/heatmap/jqplot/jquery.jqplot.min.js"></script>
+<script src="@context.path/plugin-assets/heatmap/jqplot/plugins/jqplot.donutRenderer.js"></script>
+<script src="@context.path/plugin-assets/heatmap/jqplot/plugins/jqplot.categoryAxisRenderer.js"></script>
+<script type="text/javascript">
+$(function(){
+  $.jqplot.config.enablePlugins = true;
+  var data = [ @Html(commitCounts.map{ case (u, c) => s"['${u}', ${c}]" }.mkString(",")) ];
+  var data_unknown = ["unknown", data.filter(function(e){return e[0].startsWith("unknown")}).reduce(function(p, e){return p + e[1]}, 0)];
+
+  var options = {
+    seriesDefaults: {
+      renderer: $.jqplot.DonutRenderer,
+      rendererOptions: {
+        sliceMargin: 3,
+        startAngle: -90,
+        showDataLabels: true,
+        totalLabel: true
+      }
+    },
+    legend: {
+      show: true,
+      location: 'e'
+    }
+  };
+
+  var plot = $.jqplot('pulse-commits-jq', [data.filter(function(e){return !e[0].startsWith("unknown")}).concat([data_unknown])], options);
+});
+</script>
+@*
+<script src="@context.path/plugin-assets/heatmap/flot/jquery.flot.min.js"></script>
+<script src="@context.path/plugin-assets/heatmap/flot/jquery.flot.categories.min.js"></script>
+<script type="text/javascript">
+$(function(){
+
+  var bar_data = {
+    data: [['@helpers.avatarLink("kounoike", 20, tooltip=true, label=true)', 40], ['@helpers.avatarLink("root", 20, tooltip=true, label=true)', 5], ["", 0], ["", 0], ["", 0] ],
+    color: "#c48dbc"
+  };
+  var options = {
+    grid: {
+      borderWidth: 1,
+      borderDColor: "#f3f3f3",
+      tickColor: "#f3f3f3"
+    },
+    series: {
+      bars: {
+        show: true,
+        barWidth: 1.0,
+        align: "center"
+      }
+    },
+    xaxis: {
+      mode: "categories",
+      tickLength: 0
+    }
+  };
+  $.plot("#pulse-commits", [bar_data], options);
+});
+</script>
+*@

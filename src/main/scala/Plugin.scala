@@ -61,6 +61,9 @@ class Plugin extends gitbucket.core.plugin.Plugin {
     Some(Link("contribution", "Contribution", s"${a.userName}/_contribution", Some("calendar")))
   )
 
+  override val repositoryMenus: Seq[(RepositoryService.RepositoryInfo, Context) => Option[Link]] = Seq((r, c) =>
+    Some(Link("pulse", "Pulse", s"/_pulse", Some("pulse"))))
+
   override val controllers: Seq[(String, ControllerBase)] = Seq(
     "/*" -> new HeatMapController()
   )
