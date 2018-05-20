@@ -1,67 +1,67 @@
 @(account: gitbucket.core.model.Account,
-    groupNames: List[String]
+  groupNames: List[String]
 )(implicit context: gitbucket.core.controller.Context)
 @gitbucket.core.account.html.main(account, groupNames, "contribution"){
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
-<link rel="stylesheet" href="@context.path/plugin-assets/heatmap/cal-heatmap.css" />
-<link rel="stylesheet" href="@context.path/plugin-assets/heatmap/gitbucket-cal-heatmap.css" />
-    <script type="text/javascript" src="@context.path/plugin-assets/heatmap/cal-heatmap.min.js"></script>
-    <h3>@account.userName Contributions</h3>
-    <div style="margin-bottom: 5px">
-      <button id="cal-heatmap-prev"><i class="fa fa-arrow-left"></i></button>
-      <button id="cal-heatmap-next"><i class="fa fa-arrow-right"></i></button>
-      <button id="cal-heatmap-x1">1</button>
-      <button id="cal-heatmap-x10">10</button>
-      <button id="cal-heatmap-x100">100</button>
-      <button id="cal-heatmap-x1000">1000</button>
-    </div>
-    <div id="cal-heatmap"></div>
-    <script type="text/javascript">
-        var parser = function(data) {
-            "use strict";
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="@context.path/plugin-assets/heatmap/cal-heatmap.css" />
+  <link rel="stylesheet" href="@context.path/plugin-assets/heatmap/gitbucket-cal-heatmap.css" />
+  <script type="text/javascript" src="@context.path/plugin-assets/heatmap/cal-heatmap.min.js"></script>
+  <h3>@account.userName Contributions</h3>
+  <div style="margin-bottom: 5px">
+    <button id="cal-heatmap-prev"><i class="fa fa-arrow-left"></i></button>
+    <button id="cal-heatmap-next"><i class="fa fa-arrow-right"></i></button>
+    <button id="cal-heatmap-x1">1</button>
+    <button id="cal-heatmap-x10">10</button>
+    <button id="cal-heatmap-x100">100</button>
+    <button id="cal-heatmap-x1000">1000</button>
+  </div>
+  <div id="cal-heatmap"></div>
+  <script type="text/javascript">
+    var parser = function(data) {
+      "use strict";
 
-            var d = {};
-            var keys = Object.keys(data[0]);
-            var i, total;
-            for (i = 0, total = data.length; i < total; i++) {
-                if(data[i][keys[0]] in d){
-                    d[data[i][keys[0]]] += +data[i][keys[1]];
-                }else{
-                    d[data[i][keys[0]]] = +data[i][keys[1]];
-                }
-            }
-        console.log(d);
-            return d;
-        };
-        window.cal = new CalHeatMap();
-        var startDate = new Date();
-        startDate.setDate(1);
-        startDate.setMonth(startDate.getMonth() - 11);
-        window.cal.init({
-            itemSelector: "#cal-heatmap",
-            domain: "month",
-            start: startDate,
-            domainLabelFormat: "%b %Y",
-            range: 12,
-            legend: [2, 4, 6, 8],
-            data: "@context.path/@account.userName/_contribution/csv",
-            dataType: "csv",
-            afterLoadData: parser,
-            nextSelector: "#cal-heatmap-next",
-            previousSelector: "#cal-heatmap-prev"
-        });
+      var d = {};
+      var keys = Object.keys(data[0]);
+      var i, total;
+      for (i = 0, total = data.length; i < total; i++) {
+        if(data[i][keys[0]] in d){
+          d[data[i][keys[0]]] += +data[i][keys[1]];
+        }else{
+          d[data[i][keys[0]]] = +data[i][keys[1]];
+        }
+      }
+      console.log(d);
+      return d;
+    };
+    window.cal = new CalHeatMap();
+    var startDate = new Date();
+    startDate.setDate(1);
+    startDate.setMonth(startDate.getMonth() - 11);
+    window.cal.init({
+      itemSelector: "#cal-heatmap",
+      domain: "month",
+      start: startDate,
+      domainLabelFormat: "%b %Y",
+      range: 12,
+      legend: [2, 4, 6, 8],
+      data: "@context.path/@account.userName/_contribution/csv",
+      dataType: "csv",
+      afterLoadData: parser,
+      nextSelector: "#cal-heatmap-next",
+      previousSelector: "#cal-heatmap-prev"
+    });
 
-        $("#cal-heatmap-x1").on('click', function() {
-          window.cal.setLegend([2, 4, 6, 8]);
-        });
-        $("#cal-heatmap-x10").on('click', function() {
-          window.cal.setLegend([20, 40, 60, 80]);
-        });
-        $("#cal-heatmap-x100").on('click', function() {
-          window.cal.setLegend([200, 400, 600, 800]);
-        });
-        $("#cal-heatmap-x1000").on('click', function() {
-          window.cal.setLegend([2000, 4000, 6000, 8000]);
-        });
-    </script>
+    $("#cal-heatmap-x1").on('click', function() {
+      window.cal.setLegend([2, 4, 6, 8]);
+    });
+    $("#cal-heatmap-x10").on('click', function() {
+      window.cal.setLegend([20, 40, 60, 80]);
+    });
+    $("#cal-heatmap-x100").on('click', function() {
+      window.cal.setLegend([200, 400, 600, 800]);
+    });
+    $("#cal-heatmap-x1000").on('click', function() {
+      window.cal.setLegend([2000, 4000, 6000, 8000]);
+    });
+  </script>
 }
