@@ -9,10 +9,10 @@ import io.github.gitbucket.solidbase.migration.{LiquibaseMigration, Migration}
 import io.github.gitbucket.solidbase.model.Version
 import io.github.kounoike.heatmap.controller.HeatMapController
 import io.github.kounoike.heatmap.hook.CommitHook
+import gitbucket.core.model.Profile._
 import gitbucket.core.model.Profile.profile.blockingApi._
 import gitbucket.core.service.{AccountService, RepositoryService}
 import gitbucket.core.util.Directory.getRepositoryDir
-import gitbucket.core.util.JGitUtil
 import gitbucket.core.util.SyntaxSugars.using
 import io.github.kounoike.heatmap.service.HeatMapCommitService
 import org.eclipse.jgit.api.Git
@@ -23,20 +23,20 @@ import scala.collection.JavaConverters._
 class CommitMigration extends Migration with HeatMapCommitService with AccountService with RepositoryService {
   val logger: Logger = LoggerFactory.getLogger(getClass)
   override def migrate(moduleId: String, version: String, context: util.Map[String, AnyRef]): Unit = {
+    logger.info(s"""context:${context.asScala}""")
     Database() withTransaction { implicit session =>
       logger.info("start HeatMap migration. Checking already exists repositories commits.")
-      getAllUsers(true).foreach { account =>
-        getAllRepositories(account.userName).foreach{ case (userName, repositoryName) =>
-          getRepository(userName, repositoryName).foreach{ repositoryInfo =>
-            using(Git.open(getRepositoryDir(userName, repositoryName))) { git =>
-              val branchName = repositoryInfo.repository.defaultBranch
-              val commitId = git.getRepository.resolve(branchName)
-              git.log.add(commitId).call.iterator.asScala.foreach { revCommit =>
-                try{
-                  insertHeatMapCommit(userName, repositoryName, branchName, revCommit.name, revCommit.getCommitterIdent.getEmailAddress, new Date(revCommit.getCommitTime * 1000L) )
-                }catch { case e:Throwable =>
-                  logger.error(s"Failed to insert commit:${revCommit.name}", e)
-                }
+      Repositories.list.foreach{ repository =>
+        logger.info(s"""${repository.userName}/${repository.repositoryName} ${repository.defaultBranch}""")
+        val branchName = repository.defaultBranch
+        using(Git.open(getRepositoryDir(repository.userName, repository.repositoryName))) { git =>
+          Option(git.getRepository.resolve(branchName)).map { branch =>
+            git.log.add(branch).call.iterator.asScala.foreach { revCommit =>
+              try {
+              insertHeatMapCommit(repository.userName, repository.repositoryName, branchName, revCommit.name, revCommit.getCommitterIdent.getEmailAddress, new Date(revCommit.getCommitTime * 1000L))
+              } catch {
+                case e: Throwable =>
+                  logger.error(s"Failed to insert ${repository.userName}/${repository.repositoryName} ${branchName} commit:${revCommit.name}", e)
               }
             }
           }

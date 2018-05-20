@@ -9,7 +9,7 @@
         <column name="COMMIT_TIME" type="datetime" nullable="false"/>
     </createTable>
 
-    <addPrimaryKey constraintName="IDX_HM_COMMIT_PK" tableName="HM_COMMIT" columnNames="USER_NAME, REPOSITORY_NAME, COMMIT_ID"/>
+    <addPrimaryKey constraintName="IDX_HM_COMMIT_PK" tableName="HM_COMMIT" columnNames="USER_NAME, REPOSITORY_NAME, BRANCH_NAME, COMMIT_ID"/>
     <createIndex indexName="IDX_HM_COMMIT_MAIL" tableName="HM_COMMIT" unique="false">
         <column name="COMMITTER_MAIL" />
     </createIndex>
