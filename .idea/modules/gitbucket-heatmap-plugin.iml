@@ -25,6 +25,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="sbt: ch.qos.logback:logback-classic:1.2.3:jar" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="sbt: org.mariadb.jdbc:mariadb-java-client:2.2.4:jar" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="sbt: io.github.gitbucket:gitbucket_2.12:4.25.0:jar" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="sbt: tomcat:tomcat-apr:5.5.23:jar" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="sbt: org.slf4j:slf4j-api:1.7.25:jar" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="sbt: org.scalatra:scalatra_2.12:2.6.1:jar" level="project" />
@@ -74,7 +76,6 @@
     <orderEntry type="library" scope="PROVIDED" name="sbt: com.zaxxer:HikariCP:2.7.4:jar" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="sbt: commons-codec:commons-codec:1.10:jar" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="sbt: commons-io:commons-io:2.6:jar" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="sbt: io.github.gitbucket:gitbucket_2.12:4.24.1:jar" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="sbt: is.tagomor.woothee:woothee-java:1.7.0:jar" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="sbt: javax.activation:activation:1.1:jar" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="sbt: javax.mail:mail:1.4.7:jar" level="project" />
@@ -100,7 +101,6 @@
     <orderEntry type="library" scope="PROVIDED" name="sbt: org.json4s:json4s-core_2.12:3.5.3:jar" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="sbt: org.json4s:json4s-jackson_2.12:3.5.3:jar" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="sbt: org.json4s:json4s-scalap_2.12:3.5.3:jar" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="sbt: org.mariadb.jdbc:mariadb-java-client:2.2.3:jar" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="sbt: org.objenesis:objenesis:2.6:jar" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="sbt: org.ow2.asm:asm:5.0.4:jar" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="sbt: org.postgresql:postgresql:42.1.4:jar" level="project" />

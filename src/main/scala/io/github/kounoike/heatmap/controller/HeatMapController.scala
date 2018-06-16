@@ -48,7 +48,8 @@ class HeatMapController extends ControllerBase with HeatMapCommitService
     val userName = params("userName")
     getAccountByUserName(userName).map { account =>
       gitbucket.heatmap.html.heatmap(account,
-        if(account.isGroupAccount) Nil else getGroupsByUserName(userName))
+        if(account.isGroupAccount) Nil else getGroupsByUserName(userName),
+        getAccountExtraMailAddresses(userName))
     } getOrElse NotFound()
   }
 
