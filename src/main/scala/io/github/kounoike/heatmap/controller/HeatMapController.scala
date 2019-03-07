@@ -74,4 +74,25 @@ class HeatMapController extends ControllerBase with HeatMapCommitService
         ).mkString("\n")
     } getOrElse NotFound()
   }
+
+  ajaxGet("/:userName/_contribution/json") {
+    val userName = params("userName")
+    getAccountByUserName(userName).map { account =>
+      val commits = getHeatMapCommitsByMailAddress(account.mailAddress)
+      val issues = Issues filter { t => t.openedUserName === userName.bind && t.pullRequest === false.bind } list
+      val pulls = Issues filter { t => t.openedUserName === userName.bind && t.pullRequest === true.bind } list
+      val comments = IssueComments filter { t => t.commentedUserName === userName.bind } list
+
+      val scores = (commits.map{ t =>
+          (t.commitTime.toInstant.getEpochSecond -> commitScore)
+        } ++ issues.map { t =>
+        (t.registeredDate.toInstant.getEpochSecond -> issueScore)
+        } ++ pulls.map { t =>
+          (t.registeredDate.toInstant.getEpochSecond -> pullScore)
+        } ++ comments.map { t =>
+          (t.registeredDate.toInstant.getEpochSecond -> commentScore)
+        }).groupBy{t => t._1}.mapValues{v => v.map{t => t._2}.sum}
+      org.json4s.jackson.Serialization.write(scores)
+    } getOrElse NotFound()
+  }
 }

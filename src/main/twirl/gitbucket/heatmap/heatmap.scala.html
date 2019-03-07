@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="@context.path/plugin-assets/heatmap/gitbucket-cal-heatmap.css" />
   <link rel="stylesheet" href="@context.path/plugin-assets/heatmap/frappe/frappe-charts.min.css" />
   <script type="text/javascript" src="@context.path/plugin-assets/heatmap/cal-heatmap.min.js"></script>
-  <script type="text/javascript" src="@context.path/plugin-assets/heatmap/frappe/frappe-charts.min.esm.js"></script>
+  <script type="text/javascript" src="@context.path/plugin-assets/heatmap/frappe/frappe-charts.min.iife.js"></script>
   <h3>@account.userName Contributions</h3>
   <div style="margin-bottom: 5px">
     <button id="cal-heatmap-prev"><i class="fa fa-arrow-left"></i></button>
@@ -20,7 +20,30 @@
     <button id="cal-heatmap-x1000">1000</button>
   </div>
   <div id="cal-heatmap"></div>
+  <div id="frappe-heatmap"></div>
   <script type="text/javascript">
+    var startDate = new Date();
+    startDate.setDate(1);
+    startDate.setMonth(startDate.getMonth() - 11);
+    var endDate = new Date();
+    endDate.setDate(endDate.getDate() - 1);
+    $.getJSON("@context.path/@account.userName/_contribution/json", function(data){
+      var heatmap = new frappe.Chart("#frappe-heatmap", {
+        type: 'heatmap',
+        title: "@account.userName Contributions",
+        data: {
+          dataPoints: data,
+          start: startDate,
+          end: endDate      // Date objects
+        },
+        countLabel: 'Level',
+        discreteDomains: 1,  // default: 1
+        colors: ['#ebedf0', '#c0ddf9', '#73b3f3', '#3886e1', '#17459e'],
+        // Set of five incremental colors,
+        // preferably with a low-saturation color for zero data;
+        // def: ['#ebedf0', '#c6e48b', '#7bc96f', '#239a3b', '#196127']
+      });
+    });
     var parser = function(data) {
       "use strict";
 
@@ -34,13 +57,9 @@
           d[data[i][keys[0]]] = +data[i][keys[1]];
         }
       }
-      console.log(d);
       return d;
     };
     window.cal = new CalHeatMap();
-    var startDate = new Date();
-    startDate.setDate(1);
-    startDate.setMonth(startDate.getMonth() - 11);
     window.cal.init({
       itemSelector: "#cal-heatmap",
       domain: "month",
@@ -66,13 +85,6 @@
     });
     $("#cal-heatmap-x1000").on('click', function() {
       window.cal.setLegend([2000, 4000, 6000, 8000]);
-    });
-  </script>
-
-  <div id="frappe-chart"></div>
-  <script>
-    new frappe.Chart("#frappe-chart", {
-
     });
   </script>
 }
